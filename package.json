@@ -1,0 +1,20 @@
+{
+  "name": "miniledger",
+  "version": "1.0.0",
+  "description": "MiniLedger - A modern full stack application to track money lent to friends",
+  "private": true,
+  "scripts": {
+    "start:backend": "npm run dev --prefix backend",
+    "start:mobile": "npm run web --prefix mobile",
+    "test:backend": "npm test --prefix backend",
+    "build:backend": "npm run build --prefix backend",
+    "db:up": "docker compose up -d"
+  },
+  "keywords": [
+    "react-native",
+    "nodejs",
+    "typescript",
+    "postgresql",
+    "miniledger"
+  ]
+}

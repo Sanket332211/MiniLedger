@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# Build outputs
+dist/
+.expo/
+web-build/
+*.tsbuildinfo
+
+# Uploads & local storage
+backend/uploads/*
+!backend/uploads/.gitkeep
+
+# Environment
+.env
+.env.local
+*.log
+
+# System files
+.DS_Store
+Thumbs.db

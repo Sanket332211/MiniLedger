@@ -13,7 +13,6 @@ import {
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../theme/colors';
 import { useAuth } from '../context/AuthContext';
-import { getApiBaseUrl, setApiHost } from '../api/client';
 
 export const LoginScreen: React.FC = () => {
   const { requestOtp, submitOtp } = useAuth();
@@ -27,8 +26,6 @@ export const LoginScreen: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [infoMsg, setInfoMsg] = useState<string | null>(null);
 
-  const [showConfig, setShowConfig] = useState(false);
-  const [serverUrl, setServerUrl] = useState(getApiBaseUrl());
 
   const handleSendOtp = async () => {
     setErrorMsg(null);
@@ -47,6 +44,11 @@ export const LoginScreen: React.FC = () => {
       setInfoMsg('Code sent! Check your server terminal log for the mock OTP.');
       if (res.mockOtp) {
         setServerHintOtp(res.mockOtp);
+        console.log(
+          `%c🔑 [MOCK OTP] Code: ${res.mockOtp} %c(Phone: ${cleanPhone})`,
+          'color: #00d26a; font-weight: bold; font-size: 14px;',
+          'color: #888;'
+        );
       }
     } catch (err: any) {
       setErrorMsg(err.message || 'Failed to send OTP. Is the backend server running?');
@@ -75,11 +77,6 @@ export const LoginScreen: React.FC = () => {
     }
   };
 
-  const handleSaveServerUrl = async () => {
-    await setApiHost(serverUrl);
-    setShowConfig(false);
-    setInfoMsg(`Backend host updated to ${serverUrl}`);
-  };
 
   return (
     <KeyboardAvoidingView
@@ -225,33 +222,6 @@ export const LoginScreen: React.FC = () => {
           )}
         </View>
 
-        {/* Backend Configuration Accordion */}
-        <View style={styles.configContainer}>
-          <TouchableOpacity
-            style={styles.configToggle}
-            onPress={() => setShowConfig(!showConfig)}
-          >
-            <MaterialCommunityIcons name="cog-outline" size={16} color={colors.textMuted} />
-            <Text style={styles.configToggleText}>
-              Backend URL: <Text style={styles.configHostText}>{getApiBaseUrl()}</Text>
-            </Text>
-          </TouchableOpacity>
-
-          {showConfig && (
-            <View style={styles.configBox}>
-              <Text style={styles.configLabel}>BACKEND API HOST</Text>
-              <TextInput
-                style={styles.configInput}
-                value={serverUrl}
-                onChangeText={setServerUrl}
-                placeholder="http://localhost:4000"
-              />
-              <TouchableOpacity style={styles.configSaveBtn} onPress={handleSaveServerUrl}>
-                <Text style={styles.configSaveText}>Update URL</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
       </ScrollView>
     </KeyboardAvoidingView>
   );
@@ -441,60 +411,5 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '600',
     color: colors.textSecondary,
-  },
-  configContainer: {
-    marginTop: 24,
-    alignItems: 'center',
-  },
-  configToggle: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    padding: 8,
-  },
-  configToggleText: {
-    fontSize: 12,
-    color: colors.textMuted,
-  },
-  configHostText: {
-    fontWeight: '600',
-    color: colors.textSecondary,
-  },
-  configBox: {
-    marginTop: 8,
-    width: '100%',
-    backgroundColor: colors.surface,
-    padding: 12,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: colors.border,
-  },
-  configLabel: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: colors.textMuted,
-    marginBottom: 6,
-  },
-  configInput: {
-    backgroundColor: colors.surfaceSubtle,
-    borderRadius: 8,
-    paddingHorizontal: 10,
-    paddingVertical: 8,
-    fontSize: 13,
-    color: colors.textPrimary,
-    borderWidth: 1,
-    borderColor: colors.border,
-    marginBottom: 8,
-  },
-  configSaveBtn: {
-    backgroundColor: colors.primary,
-    paddingVertical: 8,
-    borderRadius: 8,
-    alignItems: 'center',
-  },
-  configSaveText: {
-    color: '#FFF',
-    fontSize: 12,
-    fontWeight: '700',
   },
 });

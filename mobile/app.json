@@ -14,7 +14,9 @@
         {
           "photosPermission": "The app needs access to your photos to upload receipts for loan entries."
         }
-      ]
+      ],
+      "expo-asset",
+      "expo-font"
     ]
   }
 }
